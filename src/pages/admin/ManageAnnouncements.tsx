@@ -61,7 +61,7 @@ export const ManageAnnouncements: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 bg-background min-h-screen">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Post Updates</h1>
@@ -131,10 +131,10 @@ export const ManageAnnouncements: React.FC = () => {
 
         <div className="grid gap-4">
           {announcements.length === 0 ? (
-            <Card>
+            <Card className="bg-card">
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Megaphone className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No Announcements</h3>
+                <h3 className="text-lg font-semibold text-card-foreground mb-2">No Announcements</h3>
                 <p className="text-muted-foreground text-center">
                   Create your first announcement to share updates with the community.
                 </p>
@@ -142,11 +142,11 @@ export const ManageAnnouncements: React.FC = () => {
             </Card>
           ) : (
             announcements.map((announcement) => (
-              <Card key={announcement.id} className="overflow-hidden">
+              <Card key={announcement.id} className="bg-card overflow-hidden">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-lg mb-2">{announcement.title}</CardTitle>
+                      <CardTitle className="text-lg mb-2 text-card-foreground">{announcement.title}</CardTitle>
                       <CardDescription className="text-sm">
                         Published on {formatDate(announcement.publishedAt)}
                       </CardDescription>

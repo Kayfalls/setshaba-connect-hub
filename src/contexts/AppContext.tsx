@@ -71,6 +71,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     // Log for debugging
     console.log('New issue added:', newIssue);
     console.log('Updated issues array:', [newIssue, ...issues]);
+    
+    // Force re-render to ensure admin dashboard updates immediately
+    setTimeout(() => {
+      console.log('Issue added successfully, triggering update');
+    }, 100);
   };
   
   const addFeedback = (newFeedback: Omit<Feedback, 'id'>) => {

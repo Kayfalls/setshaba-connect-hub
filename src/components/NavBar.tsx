@@ -31,14 +31,14 @@ export const NavBar: React.FC = () => {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
+    <nav className="sticky top-0 z-50 bg-card border-b border-border shadow-sm">
       <div className="max-w-content mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-sm">SC</span>
             </div>
-            <span className="font-bold text-lg text-foreground">Setshaba Connect</span>
+            <span className="font-bold text-lg text-card-foreground">Setshaba Connect</span>
           </Link>
           
           <div className="hidden md:flex items-center gap-1">
@@ -48,7 +48,7 @@ export const NavBar: React.FC = () => {
                 asChild
                 variant={isActive(path) ? "default" : "ghost"}
                 size="sm"
-                className={isActive(path) ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted"}
+                className={isActive(path) ? "bg-primary text-white" : "text-muted-foreground hover:text-card-foreground hover:bg-muted"}
               >
                 <Link to={path} className="flex items-center gap-2">
                   <Icon className="h-4 w-4" />
@@ -82,7 +82,7 @@ export const NavBar: React.FC = () => {
       </div>
       
       {/* Mobile bottom navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50 shadow-md">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 shadow-md">
         <div className="flex items-center justify-around px-4 py-2">
           {citizenLinks.map(({ path, icon: Icon, label }) => (
             <Button
@@ -93,7 +93,7 @@ export const NavBar: React.FC = () => {
               className={`flex flex-col gap-1 h-auto py-3 ${
                 isActive(path) 
                   ? "bg-primary text-white" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  : "text-muted-foreground hover:text-card-foreground hover:bg-muted"
               }`}
             >
               <Link to={path}>

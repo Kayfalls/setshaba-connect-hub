@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { categoryIcons, Category, Status } from "@/data/mockData";
+import { categoryIcons, Category, Status, Urgency } from "@/data/mockData";
 import { Search, Filter } from "lucide-react";
 
 export const Issues: React.FC = () => {
@@ -13,6 +13,7 @@ export const Issues: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">("all");
   const [selectedStatus, setSelectedStatus] = useState<Status | "all">("all");
+  const [selectedUrgency, setSelectedUrgency] = useState<Urgency | "all">("all");
 
   const filteredIssues = issues.filter(issue => {
     const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -21,28 +22,30 @@ export const Issues: React.FC = () => {
     
     const matchesCategory = selectedCategory === "all" || issue.category === selectedCategory;
     const matchesStatus = selectedStatus === "all" || issue.status === selectedStatus;
+    const matchesUrgency = selectedUrgency === "all" || issue.urgency === selectedUrgency;
     
-    return matchesSearch && matchesCategory && matchesStatus;
+    return matchesSearch && matchesCategory && matchesStatus && matchesUrgency;
   });
 
   const categories: Category[] = ["Water", "Electricity", "Roads", "Waste", "Other"];
   const statuses: Status[] = ["Reported", "In Progress", "Resolved"];
+  const urgencies: Urgency[] = ["Low", "Medium", "High", "Emergency"];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+    <div className="mobile-app-container pb-20 md:pb-0">
       <div className="max-w-content mx-auto px-4 py-6 space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-2">Community Issues</h1>
-          <p className="text-gray-700">
+          <p className="text-muted-foreground">
             Track the progress of reported issues in your community
           </p>
         </div>
 
         {/* Search and Filters */}
-        <Card className="bg-white border border-border shadow-md">
+        <Card className="content-card">
           <CardContent className="p-4 space-y-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search issues by title, description, or location..."
                 value={searchTerm}
@@ -53,13 +56,13 @@ export const Issues: React.FC = () => {
             
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-gray-400" />
-                <span className="text-sm font-medium text-foreground">Filters:</span>
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-card-foreground">Filters:</span>
               </div>
               
               {/* Category Filter */}
               <div className="space-y-2">
-                <span className="text-sm text-gray-500">Category:</span>
+                <span className="text-sm text-muted-foreground">Category:</span>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant={selectedCategory === "all" ? "default" : "outline"}
@@ -86,7 +89,7 @@ export const Issues: React.FC = () => {
               
               {/* Status Filter */}
               <div className="space-y-2">
-                <span className="text-sm text-gray-500">Status:</span>
+                <span className="text-sm text-muted-foreground">Status:</span>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant={selectedStatus === "all" ? "default" : "outline"}
@@ -109,6 +112,32 @@ export const Issues: React.FC = () => {
                   ))}
                 </div>
               </div>
+              
+              {/* Urgency Filter */}
+              <div className="space-y-2">
+                <span className="text-sm text-muted-foreground">Urgency:</span>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={selectedUrgency === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedUrgency("all")}
+                    className={selectedUrgency === "all" ? "bg-primary hover:bg-primary-hover text-white" : ""}
+                  >
+                    All Urgency
+                  </Button>
+                  {urgencies.map(urgency => (
+                    <Button
+                      key={urgency}
+                      variant={selectedUrgency === urgency ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedUrgency(urgency)}
+                      className={selectedUrgency === urgency ? "bg-primary hover:bg-primary-hover text-white" : ""}
+                    >
+                      {urgency}
+                    </Button>
+                  ))}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -116,16 +145,17 @@ export const Issues: React.FC = () => {
         {/* Results Summary */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-muted-foreground">
               Showing {filteredIssues.length} of {issues.length} issues
             </span>
-            {(selectedCategory !== "all" || selectedStatus !== "all" || searchTerm) && (
+            {(selectedCategory !== "all" || selectedStatus !== "all" || selectedUrgency !== "all" || searchTerm) && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => {
                   setSelectedCategory("all");
                   setSelectedStatus("all");
+                  setSelectedUrgency("all");
                   setSearchTerm("");
                 }}
               >
@@ -155,11 +185,11 @@ export const Issues: React.FC = () => {
             ))}
           </div>
         ) : (
-          <Card className="bg-white border border-border shadow-md">
+          <Card className="content-card">
             <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-              <Search className="h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-bold text-foreground mb-2">No issues found</h3>
-              <p className="text-gray-700 mb-4">
+              <Search className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-bold text-card-foreground mb-2">No issues found</h3>
+              <p className="text-muted-foreground mb-4">
                 Try adjusting your search terms or filters
               </p>
               <Button
@@ -167,6 +197,7 @@ export const Issues: React.FC = () => {
                 onClick={() => {
                   setSelectedCategory("all");
                   setSelectedStatus("all");
+                  setSelectedUrgency("all");
                   setSearchTerm("");
                 }}
               >

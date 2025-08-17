@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useApp } from "@/contexts/AppContext";
-import { Category } from "@/data/mockData";
+import { Category, Urgency } from "@/data/mockData";
 import { getCurrentLocation } from "@/utils/locationService";
 import { Camera, Send, MapPin, Locate } from "lucide-react";
 
@@ -17,6 +17,7 @@ export const Report: React.FC = () => {
   const [formData, setFormData] = useState({
     title: "",
     category: "",
+    urgency: "",
     location: "",
     description: "",
     imageUrl: ""
@@ -72,7 +73,7 @@ export const Report: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.category || !formData.location || !formData.description) {
+    if (!formData.title || !formData.category || !formData.urgency || !formData.location || !formData.description) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields.",
@@ -84,6 +85,7 @@ export const Report: React.FC = () => {
     const newIssue = {
       title: formData.title,
       category: formData.category as Category,
+      urgency: formData.urgency as Urgency,
       location: formData.location,
       description: formData.description,
       status: "Reported" as const,
@@ -92,7 +94,7 @@ export const Report: React.FC = () => {
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         event: "Reported"
       }],
-      isUrgent: formData.category === "Water" || formData.title.toLowerCase().includes("burst"),
+      isUrgent: formData.urgency === "Emergency" || formData.urgency === "High",
       reportedBy: "Citizen Report",
       reportedAt: new Date().toISOString()
     };
@@ -110,6 +112,7 @@ export const Report: React.FC = () => {
     setFormData({
       title: "",
       category: "",
+      urgency: "",
       location: "",
       description: "",
       imageUrl: ""
@@ -117,16 +120,16 @@ export const Report: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
+    <div className="mobile-app-container pb-20 md:pb-8">
       <main className="max-w-content mx-auto px-4 py-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground mb-2">Report an Issue</h1>
-          <p className="text-gray-700">Help us serve you better by reporting community issues</p>
+          <p className="text-muted-foreground">Help us serve you better by reporting community issues</p>
         </div>
 
-        <Card className="bg-white border border-border shadow-md">
+        <Card className="content-card">
           <CardHeader className="border-b border-border">
-            <CardTitle className="flex items-center gap-3 text-xl font-bold">
+            <CardTitle className="flex items-center gap-3 text-xl font-bold text-card-foreground">
               <div className="p-2 bg-primary rounded-md">
                 <Send className="h-6 w-6 text-white" />
               </div>
@@ -166,6 +169,20 @@ export const Report: React.FC = () => {
                 </Select>
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="urgency">Urgency Level *</Label>
+                <Select value={formData.urgency} onValueChange={(value) => setFormData(prev => ({ ...prev, urgency: value as Urgency }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select urgency level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Low">🟢 Low - Can wait several days</SelectItem>
+                    <SelectItem value="Medium">🟡 Medium - Should be addressed soon</SelectItem>
+                    <SelectItem value="High">🟠 High - Needs prompt attention</SelectItem>
+                    <SelectItem value="Emergency">🔴 Emergency - Immediate action required</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="location">Location *</Label>
                 <div className="flex gap-2">
@@ -230,7 +247,7 @@ export const Report: React.FC = () => {
                     Upload
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Take a photo or upload from your device to help us understand the issue better
                 </p>
                 {formData.imageUrl && (

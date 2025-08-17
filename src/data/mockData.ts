@@ -8,6 +8,7 @@ export const mockData = {
       location: "Main Street, Soweto",
       status: "In Progress" as const,
       progress: 40,
+      urgency: "Emergency" as const,
       timeline: [
         { time: "08:30 AM", event: "Reported" },
         { time: "09:15 AM", event: "Repair crew dispatched" },
@@ -25,6 +26,7 @@ export const mockData = {
       location: "5th Avenue, Johannesburg",
       status: "Reported" as const,
       progress: 0,
+      urgency: "High" as const,
       timeline: [
         { time: "07:45 AM", event: "Reported" },
       ],
@@ -40,6 +42,7 @@ export const mockData = {
       location: "Elm Street, Cape Town",
       status: "Resolved" as const,
       progress: 100,
+      urgency: "Medium" as const,
       timeline: [
         { time: "07:00 AM", event: "Reported" },
         { time: "09:30 AM", event: "Repair crew assigned" },
@@ -48,6 +51,39 @@ export const mockData = {
       isUrgent: false,
       reportedBy: "City Inspector",
       reportedAt: "2025-08-15T07:00:00Z",
+    },
+    {
+      id: 4,
+      title: "Street Light Malfunction",
+      category: "Electricity" as const,
+      description: "Multiple street lights not working on residential street.",
+      location: "Oak Avenue, Pretoria",
+      status: "Reported" as const,
+      progress: 0,
+      urgency: "Low" as const,
+      timeline: [
+        { time: "06:30 PM", event: "Reported" },
+      ],
+      isUrgent: false,
+      reportedBy: "Resident",
+      reportedAt: "2025-08-16T18:30:00Z",
+    },
+    {
+      id: 5,
+      title: "Waste Collection Missed",
+      category: "Waste" as const,
+      description: "Garbage collection truck missed our street for two weeks.",
+      location: "Pine Street, Durban",
+      status: "In Progress" as const,
+      progress: 25,
+      urgency: "Medium" as const,
+      timeline: [
+        { time: "08:00 AM", event: "Reported" },
+        { time: "10:30 AM", event: "Assigned to collection team" },
+      ],
+      isUrgent: false,
+      reportedBy: "Community Leader",
+      reportedAt: "2025-08-15T08:00:00Z",
     },
   ],
   events: [
@@ -108,6 +144,7 @@ export const mockData = {
 
 export type Category = "Water" | "Electricity" | "Roads" | "Waste" | "Other";
 export type Status = "Reported" | "In Progress" | "Resolved";
+export type Urgency = "Low" | "Medium" | "High" | "Emergency";
 export type FeedbackStatus = "In Review" | "Acknowledged" | "Resolved";
 
 export interface Issue {
@@ -118,6 +155,7 @@ export interface Issue {
   location: string;
   status: Status;
   progress: number;
+  urgency: Urgency;
   timeline: { time: string; event: string; }[];
   isUrgent: boolean;
   reportedBy: string;
@@ -136,7 +174,14 @@ export const categoryIcons = {
 };
 
 export const statusColors = {
-  Reported: "status-reported",
-  "In Progress": "status-progress", 
-  Resolved: "status-resolved",
+  Reported: "status-badge-reported",
+  "In Progress": "status-badge-progress", 
+  Resolved: "status-badge-resolved",
+};
+
+export const urgencyColors = {
+  Low: "urgency-badge-low",
+  Medium: "urgency-badge-medium",
+  High: "urgency-badge-high",
+  Emergency: "urgency-badge-emergency",
 };

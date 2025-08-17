@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
+import { SplashScreen } from "@/components/SplashScreen";
 import { NavBar } from "@/components/NavBar";
 import { Home } from "@/pages/citizen/Home";
 import { Issues } from "@/pages/citizen/Issues";
@@ -16,10 +17,26 @@ import { ManageAnnouncements } from "@/pages/admin/ManageAnnouncements";
 import { ManageEvents } from "@/pages/admin/ManageEvents";
 import { ManageFeedback } from "@/pages/admin/ManageFeedback";
 import NotFound from "./pages/NotFound";
+import React, { useState, useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
+  return (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AppProvider>
@@ -45,6 +62,7 @@ const App = () => (
       </AppProvider>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
